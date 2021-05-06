@@ -7,22 +7,36 @@ import datetime as dt
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func
-from sqlalchemy.pool import StaticPool
+from sqlalchemy import create_engine, func, inspect
 
 # Database setup
 # create engine to hawaii.sqlite
-engine = create_engine("sqlite:///Resources/hawaii.sqlite", echo=false)
+engine = create_engine("sqlite:///Resources/hawaii.sqlite", connect_args={'check_same_thread': False}, echo=True)
 
+inspector = inspect(engine)
+inspector.get_table_names()
+columns = inspector.get_columns("station")
+print("========")
+print("station")
+print("======")
+for column in columns:
+    print(column["name"], column["type"])
+print("======")
+print("measurement")
+print("====")
+columns = inspector.get_columns("measurement")
+for column in columns: 
+    print(column["name"], column["type"])
 # reflect an existing database into a new model
-base = automap_base()
+#base = automap_base()
 
 # reflect the tables
-base.prepare(engine, reflect=True)
+#base.prepare(engine, reflect=True)
 
 # Save references to each table
-measurement = base.classes.measurement
-station = base.classes.station
+#measurement = base.classes.measurement
+#station = base.classes.station
 
 # Create our session (link) from Python to the DB
-session = Session(engine)
+#session = Session(engine)
+
