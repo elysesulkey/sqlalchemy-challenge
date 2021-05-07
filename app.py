@@ -1,42 +1,29 @@
-# Import Flask and dependencies
-from flask import Flask, jsonify
+# Dependencies and Setup
 import numpy as np
 import datetime as dt
 
-# Python SQL toolkit and Object Relational Mapper
+# Python SQL Toolkit and Object Relational Mapper
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy import create_engine, func, inspect
+from sqlalchemy import create_engine, func
 
-# Database setup
-# create engine to hawaii.sqlite
-engine = create_engine("sqlite:///Resources/hawaii.sqlite", connect_args={'check_same_thread': False}, echo=True)
+# Import Flask
+from flask import Flask, jsonify
 
-inspector = inspect(engine)
-inspector.get_table_names()
-columns = inspector.get_columns("station")
-print("========")
-print("station")
-print("======")
-for column in columns:
-    print(column["name"], column["type"])
-print("======")
-print("measurement")
-print("====")
-columns = inspector.get_columns("measurement")
-for column in columns: 
-    print(column["name"], column["type"])
-# reflect an existing database into a new model
-#base = automap_base()
+# Database Setup
+engine = create_engine("sqlite:///hawaii.sqlite")
 
-# reflect the tables
-#base.prepare(engine, reflect=True)
+# Reflect Existing Database Into a New Model
+Base = automap_base()
 
-# Save references to each table
-#measurement = base.classes.measurement
-#station = base.classes.station
+# Reflect the Tables
+Base.prepare(engine, reflect=True)
 
-# Create our session (link) from Python to the DB
+# Save References to Each Table
+Measurement = Base.classes.measurement
+Station = Base.classes.station
+
+# Create Session (Link) From Python to the DB
 #session = Session(engine)
 
