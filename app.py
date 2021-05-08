@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 # Database Setup
-engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+engine = create_engine("sqlite:///Resources/hawaii.sqlite", connect_args={"check_same_thread": False}, echo=True)
 
 # Reflect Existing Database Into a New Model
 Base = automap_base()
@@ -32,4 +32,4 @@ Station = Base.classes.station
 session = Session(engine)
 
 # Flask Setup
-app = Flask(__name__)
+#app = Flask(__name__)
