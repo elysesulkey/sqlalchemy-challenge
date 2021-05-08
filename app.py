@@ -12,6 +12,7 @@ import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+from sqlalchemy.sql import exists  
 
 # Database Setup
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
@@ -54,7 +55,7 @@ def precipitation():
     # Create session (link) from Python to the DB
     session = Session(engine)
 
-    # Query Measurement
+    # Query measurement
     results = (session.query(measurement.date, measurement.tobs)
                       .order_by(measurement.date))
     
@@ -75,7 +76,7 @@ def stations():
     # Create session (link) from Python to the DB
     session = Session(engine)
 
-    # Query Stations
+    # Query stations
     results = session.query(station.name).all()
 
     # Convert list of tuples into normal list
@@ -90,7 +91,7 @@ def tobs():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    # Query Measurements for latest date and calculate query_start_date
+    # Query Measurements for latest date and calculate start date
     latest_date = (session.query(measurement.date)
                           .order_by(measurement.date
                           .desc())
@@ -136,7 +137,7 @@ def start_only(start):
     # Create session (link) from Python to the DB
     session = Session(engine)
 
-    # Date Range (only for help to user in case date gets entered wrong)
+    # Date Range for 404 error
     date_max = session.query(measurement.date).order_by(measurement.date.desc()).first()
     date_max_str = str(date_max)
     date_max_str = re.sub("'|,", "",date_max_str)
@@ -172,15 +173,15 @@ def start_only(start):
    
 
 @app.route("/api/v1.0/<start>/<end>") 
-# Calculate the `TMIN`, `TAVG`, and `TMAX` for dates between the start and end date inclusive
+# Calculate the `TMIN`, `TAVG`, and `TMAX` for dates between the start and end date 
 def start_end(start, end):
 
     # Create session (link) from Python to the DB
     session = Session(engine)
 
-    # Date Range (only for help to user in case date gets entered wrong)
+    # Date range for 404
     date_max = session.query(measurement.date).order_by(measurement.date.desc()).first()
-    date_max_str = str(date_range_max)
+    date_max_str = str(date_max)
     date_max_str = re.sub("'|,", "",date_max_str)
     print (date_max_str)
 
