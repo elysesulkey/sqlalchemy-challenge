@@ -41,7 +41,7 @@ app = Flask(__name__)
 @app.route("/")
 def welcome():
     return (
-        f"Welcome to the Hawaii vacation planner!<br/>"
+        f"Welcome to the Hawaii vacation planner API homepage!<br/>"
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
@@ -50,13 +50,13 @@ def welcome():
     )
 
 @app.route("/api/v1.0/precipitation") 
-#Convert query results to a dictionary using `date` as the key and `tobs` as the value
+#Convert query results to a dictionary using `date` as the key and `prcp` as the value
 def precipitation():
     # Create session (link) from Python to the DB
     session = Session(engine)
 
     # Query measurement
-    results = (session.query(measurement.date, measurement.tobs)
+    results = (session.query(measurement.date, measurement.prcp)
                       .order_by(measurement.date))
     
     # Create a dictionary
@@ -64,7 +64,7 @@ def precipitation():
     for row in results:
         date_dict = {}
         date_dict["date"] = row.date
-        date_dict["tobs"] = row.tobs
+        date_dict["prcp"] = row.prcp
         precip_date.append(date_dict)
 
     return jsonify(precip_date)
